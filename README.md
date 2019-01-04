@@ -17,6 +17,10 @@ docker-compose run app sh -c "python manage.py createsuperuser"
 
 docker-compose run --rm app sh -c "python manage.py startapp user"
 
+docker-compose run --rm app sh -c "python manage.py startapp recipe"
+
+docker-compose run app sh -c "python manage.py makemigrations"
+
 # To start and test Up run:
 docker-compose up
 
