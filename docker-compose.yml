@@ -1,15 +1,16 @@
 version: '3'
 
 services:
-  app:
+  api:
     build:
-      context: .
+      context: ./app/
     ports:
       - "8000:8000"
     volumes:
-      - './app:/app'
+      - ./app:/app
     command: >
-      sh -c "python manage.py wait_for_db &&
+      sh -c "sleep 20 &&
+             python manage.py wait_for_db &&
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
 
@@ -22,6 +23,23 @@ services:
     depends_on:
       - db
 
+
+  front:
+    build:
+      context: ./front_end/
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./front_end:/front_end
+      - /front_end/node_modules
+    command: >
+      sh -c "npm install -qy && npm start"
+
+    environment:
+    - API_HOST=api
+
+    depends_on:
+      - api
 
   db:
     image: postgres:10-alpine

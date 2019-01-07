@@ -1,3 +1,4 @@
+# Setup backend server
 FROM python:3.7-alpine
 MAINTAINER Drilon Berisha
 
@@ -17,7 +18,9 @@ RUN apk del .tmp-build-deps
 # Setup directory structure
 RUN mkdir /app
 WORKDIR /app
-COPY ./app/ /app
+
+#Copy Work Dir to Docker Dir All from root working dir to app dir on docker
+COPY ./ /app
 
 RUN adduser -D user
 USER user
