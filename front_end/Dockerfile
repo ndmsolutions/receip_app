@@ -2,15 +2,10 @@
 FROM ubuntu:16.04
 MAINTAINER Drilon Berisha
 
-RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment
-RUN echo "LANG=en_US.UTF-8" >> /etc/environment
-RUN echo "NODE_ENV=development" >> /etc/environment
-RUN more "/etc/environment"
-
 RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get dist-upgrade -y
-RUN apt-get install curl htop git zip nano ncdu build-essential chrpath libssl-dev libxft-dev pkg-config glib2.0-dev libexpat1-dev gobject-introspection python-gi-dev apt-transport-https libgirepository1.0-dev libtiff5-dev libjpeg-turbo8-dev libgsf-1-dev -y
+RUN apt-get install iputils-ping dnsutils curl htop git zip nano ncdu build-essential chrpath libssl-dev libxft-dev pkg-config glib2.0-dev libexpat1-dev gobject-introspection python-gi-dev apt-transport-https libgirepository1.0-dev libtiff5-dev libjpeg-turbo8-dev libgsf-1-dev -y
 
 # Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_9.x | bash
@@ -22,6 +17,11 @@ RUN nodemon -v
 
 # Cleanup
 RUN apt-get update && apt-get upgrade -y && apt-get autoremove -y
+
+RUN echo "export LC_ALL=en_US.UTF-8" >> /etc/profile.d/node.sh
+RUN echo "export LANG=en_US.UTF-8" >> /etc/profile.d/node.sh
+RUN echo "export NODE_ENV=development" >> /etc/profile.d/node.sh
+RUN more "/etc/profile.d/node.sh"
 
 # Setup directory structure
 RUN mkdir /front_end

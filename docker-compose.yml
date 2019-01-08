@@ -9,20 +9,24 @@ services:
     volumes:
       - ./app:/app
     command: >
-      sh -c "sleep 20 &&
+      sh -c "sleep 3 &&
              python manage.py wait_for_db &&
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
 
     environment:
-    - DB_HOST=db
-    - DB_NAME=app
-    - DB_USER=postgres
-    - DB_PASS=supersecretpassword
-
+      DB_HOST: db
+      DB_NAME: api
+      DB_USER: postgres
+      DB_PASS: supersecretpassword
+    
+    restart: always
+    
+    links:
+      - db
+      
     depends_on:
       - db
-
 
   front:
     build:
@@ -32,18 +36,25 @@ services:
     volumes:
       - ./front_end:/front_end
       - /front_end/node_modules
-    command: >
-      sh -c "npm install -qy && npm start"
 
     environment:
-    - API_HOST=api
-
+      API_URL: api
+      API_DEMO: madona
+    
+    restart: always
+    
+    command: >
+      sh -c "npm install -qy && npm start"
+    
+    links:
+      - api
+      
     depends_on:
       - api
 
   db:
     image: postgres:10-alpine
     environment:
-      - POSTGRES_DB=app
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=supersecretpassword
+        POSTGRES_DB: api
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: supersecretpassword
