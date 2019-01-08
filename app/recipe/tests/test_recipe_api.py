@@ -93,6 +93,18 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data, serializer.data)
 
+    def test_view_recipe_detail(self):
+        """Test viewing a recipe detail"""
+        recipe = sample_recipe(user=self.user)
+        recipe.tags.add(sample_tag(user=self.user))
+        recipe.ingredients.add(sample_ingredient(user=self.user))
+
+        url = detail_url(recipe.id)
+        res = self.client.get(url)
+
+        serializer = RecipeDetailSerializer(recipe)
+        self.assertEqual(res.data, serializer.data)
+
     def test_create_basic_recipe(self):
         """Test creating recipe"""
         payload = {
@@ -172,7 +184,6 @@ class PrivateRecipeApiTests(TestCase):
             'time_minutes': 25,
             'price': 5.00
         }
-
         url = detail_url(recipe.id)
         self.client.put(url, payload)
 
@@ -182,15 +193,3 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(recipe.price, payload['price'])
         tags = recipe.tags.all()
         self.assertEqual(len(tags), 0)
-
-    def test_view_recipe_detail(self):
-        """Test viewing a recipe detail"""
-        recipe = sample_recipe(user=self.user)
-        recipe.tags.add(sample_tag(user=self.user))
-        recipe.ingredients.add(sample_ingredient(user=self.user))
-
-        url = detail_url(recipe.id)
-        res = self.client.get(url)
-
-        serializer = RecipeDetailSerializer(recipe)
-        self.assertEqual(res.data, serializer.data)
