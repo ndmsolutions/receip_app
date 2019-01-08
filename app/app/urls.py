@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
+from recipe.views import RecipeAllViewSet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/user/', include('user.urls')),
     path('api/recipe/', include('recipe.urls')),
+    path("api/all_recipes", RecipeAllViewSet.as_view({'get': 'list'})),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -79,3 +79,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+
+
+class RecipeAllViewSet(viewsets.ModelViewSet):
+    """Handles creating, reading and updating apartments items."""
+
+    serializer_class = serializers.AllReceipSerializer
+    queryset = Recipe.objects.all()
+    http_method_names = ['get']
