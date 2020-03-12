@@ -30,6 +30,6 @@ WORKDIR /front_end
 #Copy Work Dir to Docker Dir All from root working dir to app dir on docker
 COPY ./ /front_end
 
-RUN adduser --disabled-password --gecos "" front
+RUN adduser --disabled-password front
 RUN chown -R front:front /front_end
 USER front
